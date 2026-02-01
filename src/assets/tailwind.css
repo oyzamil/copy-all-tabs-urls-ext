@@ -1,0 +1,223 @@
+@layer theme, base, antd, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@plugin './../../plugins/tailwind-color';
+@plugin './../../plugins/tailwind-scrollbar';
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body:not(#content-ui) {
+    @apply relative font-['Poppins']!;
+  }
+  * {
+    @apply scrollbar:size-1 scrollbar-track:bg-app-100 dark:scrollbar-track:bg-neutral-400 scrollbar-thumb:bg-neutral-400 scrollbar-thumb:rounded-full dark:scrollbar-thumb:bg-neutral-600 selection:bg-app-100 selection:text-app-500;
+  }
+  mark {
+    @apply bg-app-500 mx-0.5 rounded px-1 whitespace-nowrap text-white;
+  }
+}
+@layer components {
+  .add-border {
+    @apply rounded-md border border-gray-200 p-2;
+  }
+
+  .bg-theme {
+    @apply bg-white dark:bg-neutral-950;
+  }
+  .bg-theme-inverse {
+    @apply bg-neutral-950 dark:bg-white;
+  }
+  .text-theme {
+    @apply text-black dark:text-white;
+  }
+  .text-theme-inverse {
+    @apply text-white dark:text-black;
+  }
+  .border-theme {
+    @apply dark:border-app-900 border border-gray-200;
+  }
+  .border-theme-inverse {
+    @apply border-app-900 border dark:border-gray-200;
+  }
+  .input-theme {
+    @apply border-gray-200 bg-gray-100 dark:border-black dark:bg-black;
+  }
+  .bg-grid-pattern {
+    @apply bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px];
+  }
+  .bg-dotted-pattern {
+    @apply bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-size-[16px_16px] dark:bg-[radial-gradient(#000000_1px,transparent_1px)];
+  }
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+  .flex-col-center {
+    @apply flex flex-col items-center justify-center;
+  }
+  .ant-form-item:last-of-type {
+    @apply mb-0;
+  }
+  .ant-btn .ant-btn-icon {
+    @apply flex;
+  }
+  .underline {
+    @apply hover:text-app-500 decoration-app-500 dark:decoration-app-400 dark:hover:decoration-app-500 rounded-sm underline decoration-2 underline-offset-2 transition duration-100;
+  }
+  .ant-app {
+    @apply flex h-[inherit] flex-col;
+  }
+  .glass {
+    @apply to-app-900/10 dark:to-app-500/20 w-full rounded-md bg-linear-to-r from-transparent p-2 backdrop-blur-md backdrop-saturate-100 dark:from-black;
+  }
+
+  .snake-comet-loader {
+    @apply relative z-10 block w-full bg-no-repeat mask-repeat-x;
+    animation: snake-comet-dynamic var(--loader-speed) linear infinite;
+    background-size: var(--snakeWidth) var(--loader-height);
+    height: var(--loader-height);
+    mask-image: var(--mask-pattern);
+    mask-size: var(--block-size);
+    -webkit-mask-image: var(--mask-pattern);
+    -webkit-mask-size: var(--block-size);
+    mask-repeat: repeat-x;
+    -webkit-mask-repeat: repeat-x;
+  }
+
+  .loader-track {
+    @apply pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 bg-repeat-x;
+    height: var(--loader-height);
+    background-image: var(--track-pattern);
+    background-size: var(--block-size);
+  }
+
+  .rainbow-border {
+    @apply relative inline-flex items-center justify-center rounded-md border-2 border-transparent transition-colors;
+
+    /* CSS variables for dynamic gradient and background */
+    --border-bg: var(--light-bg);
+    --rainbow-gradient: linear-gradient(90deg, #ff4242, #a1ff42, #42a1ff, #42d0ff, #a142ff);
+
+    background:
+      linear-gradient(var(--border-bg), var(--border-bg)),
+      linear-gradient(var(--border-bg) 30%, rgba(0, 0, 0, 0)), var(--rainbow-gradient);
+    background-size: 100%, 100%, 200%;
+    background-clip: padding-box, border-box, border-box;
+    background-origin: border-box;
+    animation: rainbow 3s linear infinite;
+  }
+
+  .dark .rainbow-border {
+    --border-bg: var(--dark-bg) !important;
+  }
+
+  /* Glow layer */
+  .rainbow-border-glow {
+    @apply pointer-events-none absolute bottom-[-20%] left-0 -z-10 h-[20%] w-full;
+    background: var(--rainbow-gradient);
+    background-size: 200%;
+    animation: rainbow 3s linear infinite;
+    filter: blur(10px);
+  }
+}
+@layer utilities {
+  .animate-spark {
+    /* 0.8s spark + 1s pause = 1.8s total */
+    animation: spark 1.8s ease-out infinite;
+  }
+
+  .animate-spark-fast {
+    /* 0.5s spark + 1s pause = 1.5s total */
+    animation: spark-fast 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes spark {
+    /* spark happens here */
+    0% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+
+    15% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    40% {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+
+    /* pause zone */
+    60%,
+    100% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+  }
+
+  @keyframes spark-fast {
+    /* spark */
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+
+    20% {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+
+    50% {
+      opacity: 0.6;
+    }
+
+    /* pause */
+    65%,
+    100% {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+  }
+
+  /* Loader Animation  */
+  @keyframes snake-comet-dynamic {
+    0% {
+      background-position: calc(-1 * var(--snakeWidth)) 0;
+      background-image: var(--grad-right);
+    }
+    49.9% {
+      background-image: var(--grad-right);
+    }
+    50% {
+      background-position: calc(100% + var(--snakeWidth)) 0;
+      background-image: var(--grad-left);
+    }
+    99.9% {
+      background-image: var(--grad-left);
+    }
+    100% {
+      background-position: calc(-1 * var(--snakeWidth)) 0;
+      background-image: var(--grad-left);
+    }
+  }
+
+  @keyframes rainbow {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 200% 50%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-spark,
+    .animate-spark-fast,
+    .snake-comet {
+      animation: none;
+    }
+  }
+}

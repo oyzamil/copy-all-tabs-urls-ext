@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "import/newline-after-import": "off",
+    "import/max-dependencies": "off",
+    "object-curly-newline": "off",
+  },
+}
