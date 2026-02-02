@@ -1,6 +1,5 @@
 import { config } from '@/app.config';
-import { Alert, Card, Input, Switch, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Alert, Card, Input, Switch } from 'antd';
 
 const App: React.FC = () => {
   const { settings, saveSettings } = useSettings();
@@ -39,7 +38,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="bg-app-100/50 text-theme flex min-h-screen flex-col items-center antialiased">
+    <div className="bg-app-100/50 text-theme flex min-h-screen flex-col items-center antialiased dark:bg-black">
       {/* Main Content */}
       <main className="max-w-3xl space-y-6 p-6 sm:p-8 lg:p-10">
         <header className="flex items-center justify-between">
@@ -49,7 +48,7 @@ const App: React.FC = () => {
             taglineClassName="text-xs"
             tagline={i18n.t('appDescription')}
           />
-          <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
+          <h1 className="badge text-2xl font-bold tracking-tight">Settings</h1>
         </header>
         <Card title="Copy Title with URL">
           <div className="flex justify-between">
@@ -66,14 +65,13 @@ const App: React.FC = () => {
 
         <Card title="Customize Copy Formats">
           <p className="mb-6 text-sm">
-            Define custom templates using <Typography.Text keyboard>{'{TITLE}'}</Typography.Text>{' '}
-            and <Typography.Text keyboard>{'{URL}'}</Typography.Text> placeholders. Press Enter for
-            new lines.
+            Define custom templates using <span className="badge">{'{TITLE}'}</span> and{' '}
+            <span className="badge">{'{URL}'}</span> placeholders. Press Enter for new lines.
           </p>
 
           {/* Plain Format */}
           <div className="space-y-2">
-            <label className="block text-base font-medium" htmlFor="plain-template">
+            <label className="block text-base font-bold" htmlFor="plain-template">
               Plain URLs Template
             </label>
             <Input.TextArea
@@ -100,7 +98,7 @@ const App: React.FC = () => {
         </Card>
 
         <Card>
-          <Button type="primary" onClick={resetToDefaults}>
+          <Button type="primary" onClick={resetToDefaults} block>
             Reset to Defaults
           </Button>
         </Card>

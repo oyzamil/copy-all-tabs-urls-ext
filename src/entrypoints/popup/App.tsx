@@ -1,5 +1,5 @@
-import { BarsIcon, ChatIcon, SettingsIcon } from '@/icons';
-import { ThemeProvider, useAntd } from '@/providers/ThemeProvider';
+import { BarsIcon, ChatIcon, MoonIcon, SettingsIcon, SunIcon } from '@/icons';
+import { ThemeProvider } from '@/providers/ThemeProvider';
 import { Dropdown, Space } from 'antd';
 import Home from './components/Home';
 
@@ -25,9 +25,21 @@ export function Body({ children }: { children: React.ReactNode }) {
 export function Header() {
   const { settings, saveSettings } = useSettings();
 
-  const { message } = useAntd();
-
   const items = [
+    {
+      key: 'theme',
+      label: i18n.t('theme'),
+      onClick: () => {
+        const theme = settings.theme === 'dark' ? 'light' : 'dark';
+        saveSettings({ theme });
+      },
+      icon:
+        settings.theme === 'dark' ? (
+          <SunIcon className="mr-2 size-4" />
+        ) : (
+          <MoonIcon className="mr-2 size-4" />
+        ),
+    },
     {
       key: 'support',
       label: i18n.t('support'),

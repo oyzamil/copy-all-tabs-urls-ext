@@ -1,4 +1,3 @@
-import { Settings } from '@/app.config';
 import { FilterIcon, PinIcon, StackIcon, TickIcon } from '@/icons';
 import { useAntd } from '@/providers/ThemeProvider';
 import { Checkbox, Dropdown, Input, Segmented, Space, Switch, Tooltip } from 'antd';
@@ -7,52 +6,6 @@ import OpenLinksModal from './OpenLinksModal';
 
 export type CopyFormat = 'plain' | 'markdown' | 'json' | 'csv';
 export type ActiveFilter = 'all' | 'pinned';
-
-// Utility functions
-const formatUrlsPlain = (tabs: TabItem[], settings: Settings, template: string): string => {
-  return tabs
-    .map((tab) => {
-      let result = template;
-      result = result.replace(/{URL}/g, tab.url);
-      if (settings.copyTitleEnabled) {
-        result = result.replace(/{TITLE}/g, tab.title);
-      } else {
-        result = result.replace(/{TITLE}/g, '');
-      }
-      return result;
-    })
-    .join('\n');
-};
-
-const formatUrlsMarkdown = (tabs: TabItem[]): string => {
-  return tabs.map((tab) => `- [${tab.title}](${tab.url})`).join('\n');
-};
-
-const formatUrlsJson = (tabs: TabItem[]): string => {
-  return JSON.stringify(
-    tabs.map((tab) => ({ title: tab.title, url: tab.url })),
-    null,
-    2
-  );
-};
-
-const formatUrlsCsv = (tabs: TabItem[]): string => {
-  const header = 'Title,URL\n';
-  const rows = tabs.map((tab) => `"${tab.title.replace(/"/g, '""')}","${tab.url}"`).join('\n');
-  return header + rows;
-};
-
-const downloadFile = (content: string, filename: string, mimeType: string) => {
-  const blob = new Blob([content], { type: mimeType });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-};
 
 // Main Component
 const Home: React.FC = () => {
@@ -316,7 +269,7 @@ const Home: React.FC = () => {
                   ? `border-app-500 bg-app-500 after:absolute after:-top-px after:left-0.75 after:h-2 after:w-1 after:rotate-45 after:border-r-2 after:border-b-2 after:border-white after:content-[""]`
                   : someSelected
                     ? 'border-app-500 bg-app-500/50'
-                    : 'border-neutral-300 dark:border-neutral-600'
+                    : 'border-theme'
                 }`}
               onClick={() => toggleGroupDomain(domain)}
             />
@@ -431,7 +384,7 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className="bg-theme text-theme flex flex-col space-y-3 p-2">
+    <div className="flex flex-col space-y-3 p-2">
       {/* Search Input */}
       <div className="flex-center gap-3">
         <Input
@@ -469,9 +422,28 @@ const Home: React.FC = () => {
       <div className="relative flex w-full items-center justify-between">
         <Segmented
           value={settings.activeFilter}
+          styles={{
+            label: {
+              paddingRight: '2px',
+            },
+          }}
           options={[
-            { label: `All Tabs ${allTabsCount}`, value: 'all' },
-            { label: `Pinned ${pinnedTabsCount}`, value: 'pinned' },
+            {
+              label: (
+                <>
+                  All Tabs <span className="badge">{allTabsCount}</span>
+                </>
+              ),
+              value: 'all',
+            },
+            {
+              label: (
+                <>
+                  Pinned <span className="badge">{pinnedTabsCount}</span>
+                </>
+              ),
+              value: 'pinned',
+            },
           ]}
           onChange={(activeFilter: ActiveFilter) => saveSettings({ activeFilter })}
         />
@@ -619,13 +591,13 @@ const Home: React.FC = () => {
           )}
         </div>
 
-        <div className="bg-app-100 text-app-600 dark:bg-app-900/50 dark:text-app-400 rounded-full px-2 py-1 text-xs">
+        <div className="badge-invert">
           <span>{selectedCount}</span> selected
         </div>
       </div>
 
       {/* Tabs Container */}
-      <div className="scrollbar-0 add-border relative max-h-80 flex-1 space-y-2 overflow-y-auto">
+      <div className="bg-theme scrollbar-0 add-border relative max-h-80 flex-1 space-y-2 overflow-y-auto">
         {filteredTabs.length === 0 ? (
           <NoTabsMessage />
         ) : settings.isGroupingEnabled ? (
@@ -733,6 +705,7 @@ const TabElement: React.FC<{
           ? `border-app-200 bg-app-50 hover:bg-app-100 dark:border-app-500/30 dark:bg-app-900/30 dark:hover:bg-app-800/50`
           : `border-neutral-300 bg-white hover:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800/50 dark:hover:bg-neutral-800`
       )}
+      title={tab.title}
     >
       <Checkbox
         checked={tab.selected}
@@ -747,10 +720,8 @@ const TabElement: React.FC<{
         </div>
       )}
 
-      <div className="mr-2 min-w-0 flex-1">
-        <div className="flex items-center gap-2 truncate text-sm text-neutral-900 dark:text-neutral-100">
-          {tab.title}
-        </div>
+      <div className="mr-2 w-full min-w-0 flex-1 truncate">
+        <div className="truncate text-sm">{tab.title}</div>
         <div className="truncate text-xs text-neutral-500 dark:text-neutral-400/60">
           {tab.url.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '')}
         </div>
@@ -795,20 +766,7 @@ const TabElement: React.FC<{
 };
 
 const NoTabsMessage: React.FC = () => (
-  <div className="flex flex-col items-center justify-center py-8 text-neutral-500 dark:text-neutral-400">
-    <svg
-      className="mb-2 h-10 w-10 opacity-70"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-      <line x1="12" y1="9" x2="12" y2="13" />
-      <line x1="12" y1="17" x2="12.01" y2="17" />
-    </svg>
+  <div className="flex flex-col items-center justify-center py-8">
     No tabs found matching your search
   </div>
 );

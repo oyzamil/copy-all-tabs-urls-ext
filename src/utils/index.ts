@@ -94,39 +94,6 @@ export function downloadFile(content: string, fileName: string, mimeType: string
   URL.revokeObjectURL(url);
 }
 
-export function updateToggleVisuals(toggleButton: HTMLButtonElement | null, isEnabled: boolean) {
-  if (!toggleButton) return;
-  const toggleSpan = toggleButton.querySelector('span[aria-hidden="true"]');
-  toggleButton.setAttribute('aria-checked', String(isEnabled));
-  if (isEnabled) {
-    toggleButton.classList.remove('bg-neutral-200', 'dark:bg-neutral-700');
-    toggleButton.classList.add('bg-indigo-600');
-    toggleSpan?.classList.replace('translate-x-0', 'translate-x-4');
-  } else {
-    toggleButton.classList.remove('bg-indigo-600');
-    toggleButton.classList.add('bg-neutral-200', 'dark:bg-neutral-700');
-    toggleSpan?.classList.replace('translate-x-4', 'translate-x-0');
-  }
-}
-
-export function highlightActiveLink() {
-  const currentPath = window.location.pathname;
-  const navLinks = document.querySelectorAll(
-    'header > div:nth-child(2) > a'
-  ) as NodeListOf<HTMLAnchorElement>;
-
-  navLinks.forEach((link) => {
-    const linkPath = link.getAttribute('href');
-    if (linkPath === currentPath) {
-      link.classList.remove('text-neutral-400');
-      link.classList.add('text-white');
-    } else {
-      link.classList.remove('text-white');
-      link.classList.add('text-neutral-400');
-    }
-  });
-}
-
 export function formatDate(dateStr: string) {
   const date = new Date(dateStr);
   date.setDate(date.getDate() + 1);

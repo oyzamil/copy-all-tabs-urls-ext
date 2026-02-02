@@ -21,7 +21,7 @@
 }
 @layer components {
   .add-border {
-    @apply rounded-md border border-gray-200 p-2;
+    @apply rounded-md border border-neutral-300 p-2 dark:border-neutral-700;
   }
 
   .bg-theme {
@@ -37,13 +37,13 @@
     @apply text-white dark:text-black;
   }
   .border-theme {
-    @apply dark:border-app-900 border border-gray-200;
+    @apply border border-neutral-300 dark:border-neutral-200;
   }
   .border-theme-inverse {
-    @apply border-app-900 border dark:border-gray-200;
+    @apply border border-neutral-300 dark:border-neutral-700;
   }
   .input-theme {
-    @apply border-gray-200 bg-gray-100 dark:border-black dark:bg-black;
+    @apply border-neutral-700 bg-gray-100 dark:border-black dark:bg-black;
   }
   .bg-grid-pattern {
     @apply bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px];
@@ -69,8 +69,18 @@
   .ant-app {
     @apply flex h-[inherit] flex-col;
   }
+  .ant-card-head-title {
+    @apply text-app-500 dark:text-app-50;
+  }
   .glass {
     @apply to-app-900/10 dark:to-app-500/20 w-full rounded-md bg-linear-to-r from-transparent p-2 backdrop-blur-md backdrop-saturate-100 dark:from-black;
+  }
+  .badge {
+    @apply bg-app-100 text-app-500 dark:bg-app-900/50 dark:text-app-400 rounded-md px-2 py-1 text-xs;
+  }
+
+  .badge-invert {
+    @apply bg-app-500 text-app-50 dark:text-app-400 dark:bg-app-900/50 rounded-md px-2 py-1 text-xs;
   }
 
   .snake-comet-loader {

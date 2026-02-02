@@ -12,7 +12,7 @@ type SettingsStore = {
 const throttleMs = 800; // Adjust as needed (500-1200ms is typical for good UX)
 
 // Base adapter for browser.storage.local
-const baseChromeAdapter = {
+const baseBrowserAdapter = {
   getItem: (name: string) =>
     new Promise<string | null>((resolve) => {
       browser.storage.local.get([name], (result) => {
@@ -33,18 +33,18 @@ const baseChromeAdapter = {
 };
 
 // Wrap setItem with throttle for delayed writes
-const throttledSetItem = throttle(baseChromeAdapter.setItem, throttleMs, {
+const throttledSetItem = throttle(baseBrowserAdapter.setItem, throttleMs, {
   leading: false, // Don't write immediately
   trailing: true, // Write after the last call in the throttle window
 });
 
 // Custom storage with throttled writes
-const throttledChromeAdapter = {
-  ...baseChromeAdapter,
+const throttledBrowserAdapter = {
+  ...baseBrowserAdapter,
   setItem: throttledSetItem,
 };
 
-const chromeJSONStorage = createJSONStorage(() => throttledChromeAdapter);
+const browserJSONStorage = createJSONStorage(() => throttledBrowserAdapter);
 
 export const useSettingsStore = create<SettingsStore>()(
   persist(
@@ -69,7 +69,7 @@ export const useSettingsStore = create<SettingsStore>()(
     }),
     {
       name: config.APP.storageBucket,
-      storage: chromeJSONStorage,
+      storage: browserJSONStorage,
       partialize: (state) => ({ settings: state.settings }),
       merge: (persistedState, currentState) => {
         const persisted = persistedState as Partial<SettingsStore> | undefined;

@@ -23,7 +23,10 @@ const Button: React.FC<ButtonWithTooltipProps> = ({
   const { className, rootClassName, block, ...rest } = buttonProps;
 
   const baseButton = (
-    <AntdButton className={cn('flex w-auto items-center', className)} block {...rest} />
+    <AntdButton
+      className={cn('flex w-auto items-center', block && 'w-full', className)}
+      {...rest}
+    />
   );
 
   const wrappedButton = rainbowBorder ? (

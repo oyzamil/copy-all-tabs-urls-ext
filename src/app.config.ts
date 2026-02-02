@@ -6,10 +6,10 @@ export const config = {
     color: '#fd5b09',
     font: 'Poppins',
     storageBucket: 'copy-all-tabs-urls-ext-settings',
-    extensionPage: 'https://softwebtuts.com/',
+    extensionPage: 'https://softwebtuts.com/one-click-copy-all-tabs-urls/',
   },
   SETTINGS: {
-    theme: 'light' as 'light' | 'dark' | 'system',
+    theme: 'light' as 'light' | 'dark',
     isGroupingEnabled: false as boolean,
     isHidePinnedEnabled: false as boolean,
     currentWindowOnly: false as boolean,

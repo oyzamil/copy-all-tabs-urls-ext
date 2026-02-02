@@ -11,6 +11,7 @@ export default defineConfig({
   srcDir: 'src',
   autoIcons: {
     baseIconPath: 'assets/icon.svg',
+    sizes: [128, 64, 48, 32, 16],
   },
   vite: (configEnv: { mode: string }) => ({
     plugins:
@@ -33,7 +34,7 @@ export default defineConfig({
       name: '__MSG_appName__',
       description: '__MSG_appDescription__',
       default_locale: 'en',
-      permissions: ['tabs', 'storage', 'activeTab', 'notifications'],
+      permissions: ['tabs', 'storage', 'activeTab'],
       options_ui: {
         page: 'opts.html',
         open_in_tab: true,
